@@ -1,0 +1,36 @@
+.main-content
+{
+    color:white;
+    background-color:rgba(0, 0, 15, 0.8);
+}
+
+.round-border
+{
+    border-radius: 15px;
+    border-style: solid;
+    border-width: 2px;
+    border-color:rgba(106, 164, 250, 0.4);
+}
+
+.violet
+{
+    color:#6aa4fa;
+    font-weight: bolder;
+    text-align: center;
+}
+
+body
+{
+    background-image: url("../images/bg.jpg");
+    background-size: auto; 
+    background-repeat:   repeat-x;
+    background-position: center center; 
+}
+
+hr
+{
+    height:1px;
+    width:60%;
+    background-color:#f9f9f9;
+}
+
