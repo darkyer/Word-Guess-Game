@@ -11,7 +11,6 @@ var possibleWords = ["alligator", "ant", "bear", "bee", "bird", "camel", "cat", 
 
 var guessesLeft = 9;
 var currentguessesLeft = guessesLeft;
-var shouldCalculateNewWord = true;
 var currentGuesses = "";
 var userGuess;
 var wordToGuess;
@@ -34,13 +33,11 @@ guessesLeftText.textContent = currentguessesLeft;
 GenerateNewWord();
 
 function GenerateNewWord() {
-    if (shouldCalculateNewWord) {
-        wordToGuess = possibleWords[Math.floor(Math.random() * possibleWords.length)].toString();
-        // computerText.textContent = wordToGuess; //HACK FOR TESTING
-        DashGenerator(wordToGuess);
-        shouldCalculateNewWord = false;
-        console.log("Clever to see the console, here is the answer: " + wordToGuess);
-    }
+    wordToGuess = possibleWords[Math.floor(Math.random() * possibleWords.length)].toString();
+    // computerText.textContent = wordToGuess; //HACK FOR TESTING
+    DashGenerator(wordToGuess);
+    shouldCalculateNewWord = false;
+    console.log("Clever to see the console, here is the answer: " + wordToGuess);
 }
 
 
@@ -55,8 +52,6 @@ function Reset() {
     currentGuesses = "";
     guessedLettersText.textContent = "_";
 
-    // Change booleant to generate a new word in the next keypress
-    shouldCalculateNewWord = true;
     GenerateNewWord();
 }
 
@@ -78,13 +73,13 @@ function CheckGameStatus() {
         wordToGuessText.textContent = wordToGuess;
         win++;
         UpdateScore();
-        setTimeout(Reset,1000);
+        setTimeout(Reset, 1000);
     }
 
     if (currentguessesLeft == 0) {
         lose++;
         UpdateScore();
-        setTimeout(Reset,1000);
+        setTimeout(Reset, 1000);
     }
 }
 
@@ -125,11 +120,8 @@ document.onkeyup = function (event) {
     }
 
     userGuess = event.key;
-    // Calculate a new word if needed
-    GenerateNewWord();
 
     // Determines which key was pressed and add it to the current guessed letters
-
     currentGuesses += userGuess + ", ";
     guessedLettersText.textContent = currentGuesses;
 
