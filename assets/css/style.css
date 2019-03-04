@@ -34,6 +34,15 @@
     text-align: center;
 }
 
+.hint{
+    color: #575757;
+    font-size: 60%;
+}
+
+.line-height{
+    line-height: 0.8;
+}
+
 body
 {
     background-image: url("../images/bg.jpg");
