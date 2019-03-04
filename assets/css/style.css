@@ -16,9 +16,20 @@
     letter-spacing: 10px;
 }
 
+#repeated-letter-error{
+    visibility: hidden;
+}
+
 .violet
 {
     color:#6aa4fa;
+    font-weight: bolder;
+    text-align: center;
+}
+
+.red
+{
+    color:red;
     font-weight: bolder;
     text-align: center;
 }

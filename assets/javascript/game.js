@@ -4,22 +4,10 @@ var win = 0;
 var lose = 0;
 
 // Possible words array
-var possibleWords = ["abruptly", "absurd", "abyss", "affix", "askew", "avenue", "awkward", "axiom", "azure", "bagpipes", "bandwagon", "banjo", "bayou",
-    "beekeeper", "bikini", "blitz", "blizzard", "boggle", "bookworm", "boxcar", "boxful", "buckaroo", "buffalo", "buffoon", "buxom", "buzzard", "buzzing",
-    "buzzwords", "caliph", "cobweb", "cockiness", "croquet", "crypt", "curacao", "cycle", "daiquiri", "dirndl", "disavow", "dizzying", "duplex", "dwarves",
-    "embezzle", "equip", "espionage", "euouae", "exodus", "faking", "fishhook", "fixable", "fjord", "flapjack", "flopping", "fluffiness", "flyby", "foxglove",
-    "frazzled", "frizzled", "fuchsia", "funny", "gabby", "galaxy", "galvanize", "gazebo", "giaour", "gizmo", "glowworm", "glyph", "gnarly", "gnostic", "gossip",
-    "grogginess", "haiku", "haphazard", "hyphen", "iatrogenic", "icebox", "injury", "ivory", "ivy", "jackpot", "jaundice", "jawbreaker", "jaywalk", "jazziest",
-    "jazzy", "jelly", "jigsaw", "jinx", "jiujitsu", "jockey", "jogging", "joking", "jovial", "joyful", "juicy", "jukebox", "jumbo", "kayak", "kazoo", "keyhole",
-    "khaki", "kilobyte", "kiosk", "kitsch", "kiwifruit", "klutz", "knapsack", "larynx", "lengths", "lucky", "luxury", "lymph", "marquis", "matrix", "megahertz",
-    "microwave", "mnemonic", "mystify", "naphtha", "nightclub", "nowadays", "numbskull", "nymph", "onyx", "ovary", "oxidize", "oxygen", "pajama", "peekaboo",
-    "phlegm", "pixel", "pizazz", "pneumonia", "polka", "pshaw", "psyche", "puppy", "puzzling", "quartz", "queue", "quips", "quixotic", "quiz", "quizzes",
-    "quorum", "razzmatazz", "rhubarb", "rhythm", "rickshaw", "schnapps", "scratch", "shiv", "snazzy", "sphinx", "spritz", "squawk", "staff", "strength",
-    "strengths", "stretch", "stronghold", "stymied", "subway", "swivel", "syndrome", "thriftless", "thumbscrew", "topaz", "transcript", "transgress",
-    "transplant", "triphthong", "twelfth", "twelfths", "unknown", "unworthy", "unzip", "uptown", "vaporize", "vixen", "vodka", "voodoo", "vortex",
-    "voyeurism", "walkway", "waltz", "wave", "wavy", "waxy", "wellspring", "wheezy", "whiskey", "whizzing", "whomever", "wimpy", "witchcraft", "wizard",
-    "woozy", "wristwatch", "wyvern", "xylophone", "yachtsman", "yippee", "yoked", "youthful", "yummy", "zephyr", "zigzag", "zigzagging", "zilch",
-    "zipper", "zodiac", "zombie", "View all"]
+var possibleWords = ["alligator", "ant", "bear", "bee", "bird", "camel", "cat", "cheetah", "chicken", "chimpanzee", "cow", "crocodile",
+    "deer", "dog", "dolphin", "duck", "eagle", "elephant", "fish", "fly", "fox", "frog", "giraffe", "goat", "goldfish", "hamster", "hippopotamus",
+    "horse", "kangaroo", "kitten", "lion", "lobster", "monkey", "octopus", "owl", "panda", "pig", "puppy", "rabbit", "rat", "scorpion", "seal", "shark",
+    "sheep", "snail", "snake", "spider", "squirrel", "tiger", "turtle", "wolf", "zebra"]
 
 var guessesLeft = 9;
 var currentguessesLeft = guessesLeft;
@@ -35,6 +23,7 @@ var loseText = document.getElementById("lose-text");
 var wordToGuessText = document.getElementById("word-to-guess");
 var guessesLeftText = document.getElementById("remaining-guesses");
 var guessedLettersText = document.getElementById("guessed-letters");
+var repeatedLetterText = document.getElementById("repeated-letter-error");
 
 // HACK FOR TESTING
 // var computerText = document.getElementById("hack")
@@ -56,7 +45,6 @@ function GenerateNewWord() {
 
 
 function Reset() {
-
     currentGuessed = "";
 
     // Reset current guesses left and text
@@ -81,25 +69,27 @@ function DashGenerator(word) {
 }
 
 function UpdateDashWord(index, letter) {
-    currentGuessed = currentGuessed.substring(0,index) + letter + currentGuessed.substring(index+1);
+    currentGuessed = currentGuessed.substring(0, index) + letter + currentGuessed.substring(index + 1);
     wordToGuessText.textContent = currentGuessed;
 }
 
 function CheckGameStatus() {
     if (currentGuessed == wordToGuess) {
+        wordToGuessText.textContent = wordToGuess;
         win++;
         UpdateScore();
-        Reset();
+        setTimeout(Reset,1000);
     }
 
-    if(currentguessesLeft == 0){
+    if (currentguessesLeft == 0) {
         lose++;
         UpdateScore();
-        Reset();
+        setTimeout(Reset,1000);
     }
 }
 
-function UpdateScore(){
+
+function UpdateScore() {
     winText.textContent = win;
     loseText.textContent = lose;
 }
@@ -113,7 +103,7 @@ function CheckLetter(letter) {
         }
     }
 
-    if(count == 0){
+    if (count == 0) {
         currentguessesLeft--;
         guessesLeftText.textContent = currentguessesLeft;
     }
@@ -122,14 +112,27 @@ function CheckLetter(letter) {
 // This function is run whenever the user presses a key.
 document.onkeyup = function (event) {
 
+    if (!event.key.match(/[a-z]/i) || event.key.length > 1) {
+        return;
+    }
+
+    if (currentGuesses.includes(event.key)) {
+        repeatedLetterText.style.visibility = "visible";
+        setInterval(() => {
+            repeatedLetterText.style.visibility = "hidden";
+        }, 3000);
+        return;
+    }
+
+    userGuess = event.key;
     // Calculate a new word if needed
     GenerateNewWord();
 
     // Determines which key was pressed and add it to the current guessed letters
-    userGuess = event.key;
+
     currentGuesses += userGuess + ", ";
     guessedLettersText.textContent = currentGuesses;
 
     CheckLetter(userGuess);
-    CheckGameStatus(); 
+    CheckGameStatus();
 };
