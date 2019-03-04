@@ -12,6 +12,10 @@
     border-color:rgba(106, 164, 250, 0.4);
 }
 
+#word-to-guess{
+    letter-spacing: 10px;
+}
+
 .violet
 {
     color:#6aa4fa;
@@ -23,7 +27,7 @@ body
 {
     background-image: url("../images/bg.jpg");
     background-size: auto; 
-    background-repeat:   repeat-x;
+    background-repeat: repeat;
     background-position: center center; 
 }
 
