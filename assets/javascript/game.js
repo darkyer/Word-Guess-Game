@@ -1,134 +1,155 @@
 
-// Number of wins, lose
-var win = 0;
-var lose = 0;
+var HangmanGame = {
+    // Number of wins, lose
+    win: 0,
+    lose: 0,
 
-// Possible words array
-var possibleWords = ["alligator", "ant", "bear", "bee", "bird", "camel", "cat", "cheetah", "chicken", "chimpanzee", "cow", "crocodile",
-    "deer", "dog", "dolphin", "duck", "eagle", "elephant", "fish", "fly", "fox", "frog", "giraffe", "goat", "goldfish", "hamster", "hippopotamus",
-    "horse", "kangaroo", "kitten", "lion", "lobster", "monkey", "octopus", "owl", "panda", "pig", "puppy", "rabbit", "rat", "scorpion", "seal", "shark",
-    "sheep", "snail", "snake", "spider", "squirrel", "tiger", "turtle", "wolf", "zebra"]
+    enableInput: true,
+    // Possible words array
+    possibleWords: ["alligator", "ant", "bear", "bee", "bird", "camel", "cat", "cheetah", "chicken", "chimpanzee", "cow", "crocodile",
+        "deer", "dog", "dolphin", "duck", "eagle", "elephant", "fish", "fly", "fox", "frog", "giraffe", "goat", "goldfish", "hamster", "hippopotamus",
+        "horse", "kangaroo", "kitten", "lion", "lobster", "monkey", "octopus", "owl", "panda", "pig", "puppy", "rabbit", "rat", "scorpion", "seal", "shark",
+        "sheep", "snail", "snake", "spider", "squirrel", "tiger", "turtle", "wolf", "zebra"],
 
-var guessesLeft = 9;
-var currentguessesLeft = guessesLeft;
-var currentGuesses = "";
-var userGuess;
-var wordToGuess;
-var currentGuessed = "";
-var audioWin = new Audio("assets/audio/win.mp3");
-var loseWin = new Audio("assets/audio/lose.mp3");
-
-// we get the html tags in some variables
-var winText = document.getElementById("win-text");
-var loseText = document.getElementById("lose-text");
-var wordToGuessText = document.getElementById("word-to-guess");
-var guessesLeftText = document.getElementById("remaining-guesses");
-var guessedLettersText = document.getElementById("guessed-letters");
-var repeatedLetterText = document.getElementById("repeated-letter-error");
-
-// HACK FOR TESTING
-// var computerText = document.getElementById("hack")
-
-//we set the current guesses left text to its default value
-guessesLeftText.textContent = currentguessesLeft;
-
-GenerateNewWord();
-
-function GenerateNewWord() {
-    wordToGuess = possibleWords[Math.floor(Math.random() * possibleWords.length)].toString();
-    // computerText.textContent = wordToGuess; //HACK FOR TESTING
-    DashGenerator(wordToGuess);
-    shouldCalculateNewWord = false;
-    console.log("Clever to see the console, here is the answer: " + wordToGuess);
-}
+    currentguessesLeft: 9,
+    currentGuesses: "",
+    userGuess: "",
+    wordToGuess: "",
+    currentGuessed: "",
+    audioWin: new Audio("assets/audio/win.mp3"),
+    audioLose: new Audio("assets/audio/lose.mp3"),
 
 
-function Reset() {
-    currentGuessed = "";
-
-    // Reset current guesses left and text
-    currentguessesLeft = guessesLeft;
-    guessesLeftText.textContent = currentguessesLeft;
-
-    // Reset already guessed letters and text
-    currentGuesses = "";
-    guessedLettersText.textContent = "_";
-
-    GenerateNewWord();
-}
-
-function DashGenerator(word) {
-    wordToGuessText.textContent = "";
-    for (var i = 0; i < word.length; i++) {
-        wordToGuessText.textContent += "_";
-        currentGuessed += "_";
-    }
-}
-
-function UpdateDashWord(index, letter) {
-    currentGuessed = currentGuessed.substring(0, index) + letter + currentGuessed.substring(index + 1);
-    wordToGuessText.textContent = currentGuessed;
-}
-
-function CheckGameStatus() {
-    if (currentGuessed == wordToGuess) {
-        wordToGuessText.textContent = wordToGuess;
-        win++;
-        audioWin.play();
-        UpdateScore();
-        setTimeout(Reset, 1000);
-    }
-
-    if (currentguessesLeft == 0) {
-        lose++;
-        loseWin.play();
-        UpdateScore();
-        setTimeout(Reset, 1000);
-    }
-}
+    // we get the html tags in some variables
+    winText: document.getElementById("win-text"),
+    loseText: document.getElementById("lose-text"),
+    wordToGuessText: document.getElementById("word-to-guess"),
+    guessesLeftText: document.getElementById("remaining-guesses"),
+    guessedLettersText: document.getElementById("guessed-letters"),
+    repeatedLetterText: document.getElementById("repeated-letter-error"),
 
 
-function UpdateScore() {
-    winText.textContent = win;
-    loseText.textContent = lose;
-}
+    // Functions
+    GenerateNewWord:function () {
+        this.enableInput = true;
+        this.wordToGuess = this.possibleWords[Math.floor(Math.random() * this.possibleWords.length)].toString();
+        this.DashGenerator(this.wordToGuess);
+        this.currentguessesLeft = 9;
+        console.log("Clever to see the console, here is the answer: " + this.wordToGuess);
+    },
+    
+    
+    Reset:function () {
+        this.currentGuessed = "";
+    
+        // Reset current guesses left and text
+        this.currentguessesLeft = 9;
+        this.guessesLeftText= document.getElementById("remaining-guesses");
+        this.guessesLeftText.textContent = currentguessesLeft;
+    
+        // Reset already guessed letters and text
+        this.currentGuesses = "";
+        this.guessedLettersText= document.getElementById("guessed-letters");
+        this.guessedLettersText.textContent = "_";
+        this.enableInput = true;
+        HangmanGame.GenerateNewWord();
+    },
+    
+    DashGenerator:function(word) {
+        this.wordToGuessText.textContent = "";
+        this.currentGuessed = "";
+        for (var i = 0; i < word.length; i++) {
+            this.wordToGuessText.textContent += "_";
+            this.currentGuessed += "_";
+        }
 
-function CheckLetter(letter) {
-    var count = 0;
-    for (var i = 0; i < wordToGuess.length; i++) {
-        if (wordToGuess.charAt(i) == letter) {
-            UpdateDashWord(i, letter);
-            count++;
+        this.currentGuesses = "";
+    },
+    
+    UpdateDashWord:function (index, letter) {
+        this.currentGuessed = this.currentGuessed.substring(0, index) + letter + this.currentGuessed.substring(index + 1);
+        this.wordToGuessText.textContent = this.currentGuessed;
+    },
+    
+    CheckGameStatus:function () {
+        if (this.currentGuessed == this.wordToGuess) {
+            this.wordToGuessText.textContent = this.wordToGuess;
+            this.win++;
+            this.audioWin.pause();
+            this.audioWin.currentTime = 0;
+            this.audioWin.play();
+            HangmanGame.UpdateScore();
+            this.enableInput = false;
+            setTimeout(HangmanGame.Reset, 1000);
+        }
+    
+        if (this.currentguessesLeft == 0) {
+            this.lose++;
+            this.audioLose.pause();
+            this.audioLose.currentTime = 0;
+            this.audioLose.play();
+            HangmanGame.UpdateScore();
+            this.enableInput = false;
+            setTimeout(HangmanGame.Reset, 1000);
+        }
+    },
+    
+    
+    UpdateScore:function () {
+        this.winText.textContent = this.win;
+        this.loseText.textContent = this.lose;
+    },
+    
+    CheckLetter: function (letter) {
+        var count = 0;
+        for (var i = 0; i < this.wordToGuess.length; i++) {
+            if (this.wordToGuess.charAt(i) == letter) {
+                HangmanGame.UpdateDashWord(i, letter);
+                count++;
+            }
+        }
+    
+        if (count == 0) {
+            this.currentguessesLeft--;
+            this.guessesLeftText.textContent = this.currentguessesLeft;
         }
     }
-
-    if (count == 0) {
-        currentguessesLeft--;
-        guessesLeftText.textContent = currentguessesLeft;
-    }
 }
+
+// Generate a new word to start the game
+HangmanGame.GenerateNewWord();
 
 // This function is run whenever the user presses a key.
 document.onkeyup = function (event) {
 
+    if(HangmanGame.enableInput == false){
+        return;
+    }
+    // Check for input only letters
     if (!event.key.match(/[a-z]/i) || event.key.length > 1) {
         return;
     }
 
-    if (currentGuesses.includes(event.key)) {
-        repeatedLetterText.style.visibility = "visible";
+    // Check if user already input that letter
+    if (HangmanGame.currentGuesses.includes(event.key)) {
+        // Change css of error to be visible 
+        HangmanGame.repeatedLetterText.style.visibility = "visible";
+
+        // Disable Error after 3 segs
         setInterval(() => {
-            repeatedLetterText.style.visibility = "hidden";
+            HangmanGame.repeatedLetterText.style.visibility = "hidden";
         }, 3000);
         return;
     }
 
+    // If we passed the previous two filters we save the letter to a variable
     userGuess = event.key;
 
     // Determines which key was pressed and add it to the current guessed letters
-    currentGuesses += userGuess + ", ";
-    guessedLettersText.textContent = currentGuesses;
+    HangmanGame.currentGuesses += userGuess + ", ";
+    HangmanGame.guessedLettersText.textContent = HangmanGame.currentGuesses;
 
-    CheckLetter(userGuess);
-    CheckGameStatus();
+    // Check status of the game
+    HangmanGame.CheckLetter(userGuess);
+    HangmanGame.CheckGameStatus();
 };
