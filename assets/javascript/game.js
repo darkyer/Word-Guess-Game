@@ -15,6 +15,8 @@ var currentGuesses = "";
 var userGuess;
 var wordToGuess;
 var currentGuessed = "";
+var audioWin = new Audio("assets/audio/win.mp3");
+var loseWin = new Audio("assets/audio/lose.mp3");
 
 // we get the html tags in some variables
 var winText = document.getElementById("win-text");
@@ -72,12 +74,14 @@ function CheckGameStatus() {
     if (currentGuessed == wordToGuess) {
         wordToGuessText.textContent = wordToGuess;
         win++;
+        audioWin.play();
         UpdateScore();
         setTimeout(Reset, 1000);
     }
 
     if (currentguessesLeft == 0) {
         lose++;
+        loseWin.play();
         UpdateScore();
         setTimeout(Reset, 1000);
     }
