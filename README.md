@@ -8,7 +8,7 @@ This a JavaScript Hang Man Game, just tipe letters until you guess the word or t
 
 ## How can I use it?
 
-Anyone can download this project and use it.
+You can Download it and use it locally or just use the github pages link ([Github pages](https://darkyer.github.io/Word-Guess-Game/))
 
 ## Built With
 
